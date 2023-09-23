@@ -33,4 +33,10 @@ public class CategoriaController {
         Categoria catergoria = categoriaService.salvarCategoria(categoria);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoria);
     }
+
+    @PutMapping("/{codigo}")
+    public ResponseEntity<Categoria> atualizarCategoria(@PathVariable Long codigo, @RequestBody Categoria categoria){
+        Categoria catergoria = categoriaService.atualizarCategoria(codigo, categoria);
+        return ResponseEntity.ok().body(categoria);
+    }
 }
