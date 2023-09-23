@@ -1,5 +1,6 @@
 package com.evendas.service;
 
+import com.evendas.exception.RegraNegocioException;
 import com.evendas.model.Categoria;
 import com.evendas.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,15 @@ public class CategoriaService {
         Optional<Categoria> categoriaEncontrada = buscarCategoriaPorId(codigo);
         if (categoriaEncontrada.isEmpty()){
             throw new EmptyResultDataAccessException(1);
+        } else if (categoriaEncontrada != null && categoriaEncontrada.get().getCodigo() != categoria.getCodigo()) {
+            throw new RegraNegocioException(
+                    String.format("A categoria %s já esta cadastrada", categoria.getNome().toUpperCase()));
         }
         categoriaEncontrada.get().setNome(categoria.getNome());
         return categoriaRepository.save(categoriaEncontrada.get());
+    }
+
+    public void deletarCategoria(Long codigo) {
+        categoriaRepository.deleteById(codigo);
     }
 }

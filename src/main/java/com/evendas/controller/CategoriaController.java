@@ -2,6 +2,7 @@ package com.evendas.controller;
 
 import com.evendas.model.Categoria;
 import com.evendas.service.CategoriaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public ResponseEntity<Categoria> salvarCategoria(@RequestBody Categoria categoria){
+    public ResponseEntity<Categoria> salvarCategoria(@Valid @RequestBody Categoria categoria){
         Categoria catergoria = categoriaService.salvarCategoria(categoria);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoria);
     }
@@ -38,5 +39,11 @@ public class CategoriaController {
     public ResponseEntity<Categoria> atualizarCategoria(@PathVariable Long codigo, @RequestBody Categoria categoria){
         Categoria catergoria = categoriaService.atualizarCategoria(codigo, categoria);
         return ResponseEntity.ok().body(categoria);
+    }
+
+    @DeleteMapping("/{codigo}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long codigo) {
+        categoriaService.deletarCategoria(codigo);
     }
 }
