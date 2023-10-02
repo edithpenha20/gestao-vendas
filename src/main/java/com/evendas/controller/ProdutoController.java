@@ -22,13 +22,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/categoria{codigoCategoria}/produto")
+@RequestMapping("/{codigoCategoria}/produto")
 public class ProdutoController {
 
     @Autowired
     private ProdutoService produtoService;
-
-
 
     @GetMapping
     @Operation(description = "Lista todos os produtos por categoria.")
@@ -57,7 +55,7 @@ public class ProdutoController {
     }
 
     @PostMapping
-    @Operation(summary = "Create a clone", description = "Criar produto por categoria.")
+    @Operation(summary = "Criar um produto por categoria", description = "Criar produto por categoria.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Produto criado", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Produto.class)) }),
@@ -68,7 +66,7 @@ public class ProdutoController {
     }
 
     @PutMapping("/{codigoProduto}")
-    @Operation(summary = "Create a clone", description = "Alterar produto por categoria.")
+    @Operation(summary = "Alterar um produto", description = "Alterar produto por categoria.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Produto alterado com sucesso", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Produto.class)) }),
@@ -86,7 +84,7 @@ public class ProdutoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Produto excluído com sucesso", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = Produto.class)) }),
-            @ApiResponse(responseCode = "404", description = "Categoria não encontrada.", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Produto não encontrado.", content = @Content),
             @ApiResponse(responseCode = "500", description = "Ocorreu um erro interno.", content = @Content) })
     public void deletar(@PathVariable Long codigoCategoria, @PathVariable Long codigoProduto) {
         produtoService.deletar(codigoCategoria, codigoProduto);

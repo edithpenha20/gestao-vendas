@@ -26,6 +26,11 @@ public class Venda {
         this.cliente = cliente;
     }
 
+    public Venda(LocalDate data, Cliente cliente) {
+        this.data = data;
+        this.cliente = cliente;
+    }
+
     public Long getCodigo() {
         return codigo;
     }
