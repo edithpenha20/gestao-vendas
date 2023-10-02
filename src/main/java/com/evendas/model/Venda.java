@@ -15,6 +15,8 @@ public class Venda {
 
     private LocalDate data;
 
+    @ManyToOne
+    @JoinColumn(name = "codigo_cliente", referencedColumnName = "codigo")
     private Cliente cliente;
 
     public Venda() {

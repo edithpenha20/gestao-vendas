@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ItemVendaRepository extends JpaRepository<ItemVenda, Long> {
 
-    @Query("select new com.gvendas.gestaovendas.entidades.ItemVenda("
+    @Query("select new com.evendas.model.ItemVenda("
             + " iv.codigo, iv.quantidade, iv.precoVendido, iv.produto, iv.venda)"
             + "  from ItemVenda iv"
             + " where iv.venda.codigo = :codigoVenda")

@@ -10,8 +10,10 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "codigo")
     private Long codigo;
 
+    @Column(name = "nome")
     private String nome;
 
     private String telefone;
