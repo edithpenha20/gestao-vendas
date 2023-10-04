@@ -1,0 +1,55 @@
+version: "3.9"
+services:
+  app:
+    container_name: gestao_venda_app
+    build:
+      context: ./gestao-vendas
+      dockerfile: Dockerfile
+    environment:
+      - OTEL_SERVICE_NAME=gestao_venda_app
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_TRACES_EXPORTER=jaeger
+      - OTEL_EXPORTER_JAEGER_ENDPOINT=http://jaeger:14250
+    ports:
+      - "8080:8080"
+    depends_on: 
+      - mysql
+      - jaeger
+      - prometheus
+      - grafana
+
+  mysql:
+    image: mysql:8.0.33
+    container_name: mysql
+    ports: 
+      - 3306:3306
+    environment:
+      MYSQL_USER: evendas
+      MYSQL_PASSWORD: evendas
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: evendas_db
+
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - 4318:4318
+      - 16686:16686
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+  
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: prometheus
+    ports: 
+      - 9090:9090
+    volumes: 
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command: 
+      - '--config.file=/etc/prometheus/prometheus.yml'
+  
+  grafana:
+    image: grafana/grafana:9.5.12
+    container_name: grafana
+    ports: 
+      - 3000:3000
