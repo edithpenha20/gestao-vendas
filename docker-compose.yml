@@ -3,7 +3,7 @@ services:
   app:
     container_name: gestao_venda_app
     build:
-      context: ./gestao-vendas
+      context: .
       dockerfile: Dockerfile
     environment:
       - OTEL_SERVICE_NAME=gestao_venda_app
