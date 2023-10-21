@@ -1,7 +1,10 @@
 package com.evendas.controller;
 
+import com.evendas.client.ViaCepClientService;
 import com.evendas.dto.cliente.ClienteRequestDTO;
 import com.evendas.dto.cliente.ClienteResponseDTO;
+import com.evendas.dto.cliente.EnderecoResponseDTO;
+import com.evendas.dto.cliente.EstadoDTO;
 import com.evendas.model.Categoria;
 import com.evendas.model.Cliente;
 import com.evendas.model.Produto;
@@ -50,6 +53,25 @@ public class ClienteController {
     public ResponseEntity<ClienteResponseDTO> buscarPorId(@PathVariable Long codigo) {
         Optional<Cliente> cliente = clienteService.buscarPorCodigo(codigo);
         return cliente.map(value -> ResponseEntity.ok(ClienteResponseDTO.converterParaClienteDTO(value))).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Operation(description = "Consultar endereço pelo CEP.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Endereço encontrado",content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = Cliente.class)) }),
+            @ApiResponse(responseCode = "404", description = "Endereço não encontrado.", content = @Content)
+    })
+    @GetMapping("{cep}/json")
+    public ResponseEntity<EnderecoResponseDTO> buscarEnderecoPorCep(@PathVariable String cep) {
+
+        EnderecoResponseDTO responseCep = clienteService.buscarEnderecoPorCep(cep);
+
+        return responseCep != null ? ResponseEntity.ok().body(responseCep) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/estados")
+    public List<EstadoDTO> getEstado(@PathVariable String estados) {
+        return clienteService.obterEstados();
     }
 
     @Operation(summary = "Cadastrar um cliente", description = "Cadastrar um cliente")

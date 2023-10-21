@@ -1,5 +1,9 @@
 package com.evendas.service;
 
+import com.evendas.client.EstadoClientService;
+import com.evendas.client.ViaCepClientService;
+import com.evendas.dto.cliente.EnderecoResponseDTO;
+import com.evendas.dto.cliente.EstadoDTO;
 import com.evendas.exception.RegraNegocioException;
 import com.evendas.model.Cliente;
 import com.evendas.repository.ClienteRepository;
@@ -13,6 +17,12 @@ import java.util.Optional;
 
 @Service
 public class ClienteService {
+
+    @Autowired
+    EstadoClientService estadoClientService;
+
+    @Autowired
+    private ViaCepClientService viaCepClientService;
 
     @Autowired
     private ClienteRepository clienteRepository;
@@ -39,6 +49,28 @@ public class ClienteService {
 
     public void deletar(Long codigo) {
         clienteRepository.deleteById(codigo);
+    }
+
+    public List<EstadoDTO> obterEstados() {
+        List<EstadoDTO> estados = estadoClientService.getEstados();
+        estados.sort((estado1, estado2) -> {
+            if (estado1.nome().equals("São Paulo")) {
+                return -1;
+            } else if (estado1.nome().equals("Rio de Janeiro")) {
+                if (estado2.nome().equals("São Paulo")) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            }
+            return estado1.nome().compareTo(estado2.nome());
+        });
+
+        return estados;
+    }
+
+    public EnderecoResponseDTO buscarEnderecoPorCep(String cep) {
+        return viaCepClientService.recebeInfoCep(cep);
     }
 
     private Cliente validarClienteExiste(Long codigo) {
