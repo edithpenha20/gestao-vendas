@@ -69,8 +69,14 @@ public class ClienteController {
         return responseCep != null ? ResponseEntity.ok().body(responseCep) : ResponseEntity.notFound().build();
     }
 
+    @Operation(description = "Consultar lista de Estados.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Estado encontrado",content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = Cliente.class)) }),
+            @ApiResponse(responseCode = "404", description = "Estado não encontrado.", content = @Content)
+    })
     @GetMapping("/estados")
-    public List<EstadoDTO> getEstado(@PathVariable String estados) {
+    public List<EstadoDTO> getEstado() {
         return clienteService.obterEstados();
     }
 

@@ -1,0 +1,23 @@
+language: java
+jdk:
+  - oraclejdk17
+before_install:
+  - sudo apt-get update
+  - cd gestao-vendas/
+  - echo "Let's start Maven Package!"
+  - mvn clean package
+  - cd ..
+  - echo "We are in the Docker folder!"
+script:
+  - docker-compose build
+before_deploy:
+  echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
+deploy:
+  provider: script
+  script:
+    docker tag ws-intellij-app:latest epenha/ws-intellij-app:latest;
+    docker push epenha/ws-intellij-app;
+  on:
+    branch: main
+notifications:
+  email: false
